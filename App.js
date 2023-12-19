@@ -4,7 +4,7 @@ import GoalItem from './components/GoalItem'
 import GoalInput from './components/GoalInput'
 
 export default function App () {
-  const [courseGoals, setCourseGoals] = useState([]);
+  const [courseGoals, setCourseGoals] = useState([])
 
   function addGoalHandler (enteredGoalText) {
     // setCourseGoals([...courseGoals, enteredGoalText]); Not a better way
@@ -16,6 +16,12 @@ export default function App () {
       //If the object doesn't have a property called 'key' but has an id like this, the keyExtractor prop should be used in FlatList
       { text: enteredGoalText, id: Math.random().toString() }
     ])
+  }
+
+  function deleteGoalHandler (id) {
+    setCourseGoals(currentCourseGoals => {
+      return currentCourseGoals.filter(goal => goal.id !== id)
+    })
   }
 
   return (
@@ -34,7 +40,13 @@ export default function App () {
           data={courseGoals}
           alwaysBounceVertical={false}
           renderItem={itemData => {
-            return <GoalItem text={itemData.item.text} />
+            return (
+              <GoalItem
+                id={itemData.item.id}
+                text={itemData.item.text}
+                onDeleteItem={deleteGoalHandler}
+              />
+            )
           }}
           //To extract the key from the items if the item object doesn't have a property named key
           keyExtractor={(item, index) => {
